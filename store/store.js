@@ -1,37 +1,15 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import { HYDRATE, createWrapper } from 'next-redux-wrapper'
-import thunkMiddleware from 'redux-thunk'
-import count from './count/reducer'
-import tick from './tick/reducer'
+import { createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const bindMiddleware = (middleware) => {
-  if (process.env.NODE_ENV !== 'production') {
-    const { composeWithDevTools } = require('redux-devtools-extension')
-    return composeWithDevTools(applyMiddleware(...middleware))
-  }
-  return applyMiddleware(...middleware)
-}
+const persistConfig = {
+  key: 'root',
+  storage,
+};
 
-const combinedReducer = combineReducers({
-  count,
-  tick,
-})
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const reducer = (state, action) => {
-  if (action.type === HYDRATE) {
-    const nextState = {
-      ...state, // use previous state
-      ...action.payload, // apply delta from hydration
-    }
-    if (state.count.count) nextState.count.count = state.count.count // preserve count value on client side navigation
-    return nextState
-  } else {
-    return combinedReducer(state, action)
-  }
-}
-
-const initStore = () => {
-  return createStore(reducer, bindMiddleware([thunkMiddleware]))
-}
-
-export const wrapper = createWrapper(initStore)
+export const store = createStore(persistedReducer, composeWithDevTools());
+export const persistor = persistStore(store);

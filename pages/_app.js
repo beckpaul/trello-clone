@@ -1,7 +1,16 @@
-import { wrapper } from '../store/store'
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '../store/store';
+import "../styles/globals.css";
 
-const WrappedApp = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />
-}
+const todoApp = ({ Component, pageProps }) => {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
+  );
+};
 
-export default wrapper.withRedux(WrappedApp)
+export default todoApp;
