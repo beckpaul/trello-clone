@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Header from "../components/Header";
@@ -7,34 +6,32 @@ import NewListButton from "../components/NewListButton";
 // https://www.freecodecamp.org/news/how-to-add-drag-and-drop-in-react-with-react-beautiful-dnd/
 
 const Index = () => {
-  const dispatch = useDispatch();
   const lists = useSelector((state) => state.lists);
+  const dispatch = useDispatch();
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
-    return result;
-  };
-
-  const handleDragEnd = (result) => {
-    const { destination, source } = result;
+  const onDragEnd = (result) => {
+    const reorder = (list, startIndex, endIndex) => {
+      const result = Array.from(list);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    };
 
     if (!result.destination) {
       return;
     }
-    // Reorder the lists based on the source and destination indexes
-    const listOrder = Array.from(Object.keys(lists));
-    const [removed] = listOrder.splice(source.index, 1);
-    listOrder.splice(destination.index, 0, removed);
 
-    // Create a new object with the reordered lists
-    const reorderedLists = listOrder.reduce((acc, listId) => {
-      acc[listId] = lists[listId];
-      return acc;
-    }, {});
-    // dispatch({ type: "REORDER_LISTS", payload: reorderedLists });
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+
+    const reordered_lists = reorder(
+      lists,
+      result.source.index,
+      result.destination.index
+    );
+
+    dispatch({ type: "REORDER_LISTS", payload: reordered_lists });
   };
 
   const DraggableList = (props) => {
@@ -56,26 +53,25 @@ const Index = () => {
     );
   };
 
-  // Double return here seems wrong
-  const Lists = ({ lists }) => {
-    if (lists) {
-      return (
-        <div>
-          {Object.keys(lists).map((listKey, index) => {
-            const list = lists[listKey];
-            return (
-              <DraggableList
-                list={list}
-                index={index}
-                title={listKey}
-                key={list.id}
-              />
-            );
-          })}
-        </div>
-      );
-    }
-  };
+  const Lists = ( lists_parent ) => {
+  if (lists_parent) {
+    return (
+      <div>
+        {lists_parent.lists.map((element, index) => {
+          const title = Object.keys(element)[0];
+          return (
+            <DraggableList
+              list={element}
+              index={index}
+              title={title}
+              key={element.id}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+};
 
   return (
     <div
@@ -86,7 +82,7 @@ const Index = () => {
     >
       <Header />
       <div className="h-screen border ml-3 m-3 border-gray-500 rounded pl-2 pt2-2">
-        <DragDropContext onDragEnd={handleDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="lists">
             {(provided) => (
               <ul
@@ -105,5 +101,5 @@ const Index = () => {
     </div>
   );
 };
-// 16 25 1
+
 export default Index;

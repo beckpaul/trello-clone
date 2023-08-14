@@ -1,5 +1,5 @@
 const initialState = {
-   titleBody: ""
+   titleBody: "My Board"
 }
 
 const titleReducer = (state = initialState, action) => {

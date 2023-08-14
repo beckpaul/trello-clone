@@ -1,19 +1,18 @@
-import { v4 as uuidv4 } from 'uuid';
-const initialState = {};
+import { v4 as uuidv4 } from "uuid";
+
+const initialState = [];
 
 const listsReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_LIST":
       const newListName = action.payload;
-      return {
-        ...state,
+      const newList = {
         [newListName]: {
           id: uuidv4(),
           cards: {},
-          tags: {},
-          date: "",
         },
       };
+      return [...state, newList];
 
     case "REORDER_LISTS":
       return {
