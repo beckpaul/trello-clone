@@ -35,9 +35,9 @@ const Index = () => {
   };
 
   const DraggableList = (props) => {
-    const { list, index, title } = props;
+    const { data, index, title } = props;
     return (
-      <Draggable draggableId={list.id} index={index} key={list.id}>
+      <Draggable draggableId={data.id} index={index} key={data.id}>
         {(provided) => (
           <li
             ref={provided.innerRef}
@@ -52,26 +52,6 @@ const Index = () => {
       </Draggable>
     );
   };
-
-  const Lists = ( lists_parent ) => {
-  if (lists_parent) {
-    return (
-      <div>
-        {lists_parent.lists.map((element, index) => {
-          const title = Object.keys(element)[0];
-          return (
-            <DraggableList
-              list={element}
-              index={index}
-              title={title}
-              key={element.id}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-};
 
   return (
     <div
@@ -90,7 +70,19 @@ const Index = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                <Lists lists={lists} />
+                {lists.map((element, index) => {
+                  console.log(element)
+                  const title = Object.keys(element)[0];
+                  const data = element[title]
+                  return (
+                    <DraggableList
+                      data={data}
+                      index={index}
+                      title={title}
+                      key={data.id}
+                    />
+                  );
+                })}
                 {provided.placeholder}
               </ul>
             )}

@@ -15,10 +15,7 @@ const listsReducer = (state = initialState, action) => {
       return [...state, newList];
 
     case "REORDER_LISTS":
-      return {
-        ...state,
-        ...action.payload,
-      };
+      return action.payload;
 
     // This will need done
     case "DELETE_LIST":
