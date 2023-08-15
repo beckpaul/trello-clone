@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Header from "../components/Header";
 import NewListButton from "../components/NewListButton";
+import DraggableList from "../components/DraggableList";
 
 // https://www.freecodecamp.org/news/how-to-add-drag-and-drop-in-react-with-react-beautiful-dnd/
 
@@ -32,25 +33,6 @@ const Index = () => {
     );
 
     dispatch({ type: "REORDER_LISTS", payload: reordered_lists });
-  };
-
-  const DraggableList = (props) => {
-    const { data, index, title } = props;
-    return (
-      <Draggable draggableId={data.id} index={index} key={data.id}>
-        {(provided) => (
-          <li
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <div className="h-30 border ml-3 m-3 border-gray-500 rounded pl-2 pt2-2">
-              {title}
-            </div>
-          </li>
-        )}
-      </Draggable>
-    );
   };
 
   return (
