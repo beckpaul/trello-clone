@@ -38,22 +38,21 @@ const Index = () => {
   return (
     <div
       className="
-      bg-gradient-to-br from-slate-900 to-indigo-800
+      bg-gradient-to-br from-purple-dark to-zinc
       flex min-h-screen flex-col items-left
-      text-slate-50"
+      text-topography"
     >
       <Header />
-      <div className="h-screen border ml-3 m-3 border-gray-500 rounded pl-2 pt2-2">
+      <div className="h-screen ml-3 m-3 rounded pl-2 pt2-2">
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="lists">
+          <Droppable droppableId="lists" direction="horizontal">
             {(provided) => (
               <ul
-                className="lists"
+                className="lists flex flex-row flex-wrap"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
                 {lists.map((element, index) => {
-                  console.log(element)
                   const title = Object.keys(element)[0];
                   const data = element[title]
                   return (
