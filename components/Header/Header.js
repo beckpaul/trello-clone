@@ -18,13 +18,16 @@ const Header = () => {
   };
 
   return (
-    <div id="header" className="bg-gray-700 py-3 px-4">
+    <div id="header" className="bg-zinc shadow-md py-3 px-4">
       {editingTitle ? (
         <div>
           <input
             id="input-title"
             type="text"
-            class="border-b  border-gray-300 bg-gray-700 px-4 py-2 focus:outline-none"
+            class="px-4 py-2
+            hover:bg-zinc-dark focus:bg-slate-200
+            focus:text-black
+            bg-zinc"
             onChange={(e) => {
               setTitle(e.target.value);
             }}
@@ -38,7 +41,7 @@ const Header = () => {
             }}
           />
           <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 ml-2 rounded"
+            className="topography font-bold py-2 px-4 ml-2 rounded"
             onClick={() => {
               updateTitle();
             }}
